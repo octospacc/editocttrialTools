@@ -9,7 +9,7 @@ pages:
   script: |
     mkdir -p ./public
     cd ./docusaurus-static
-    npm build+postprocess
+    npm run build+postprocess
     mv ./build ./public/docusaurus-static
   artifacts:
     paths:

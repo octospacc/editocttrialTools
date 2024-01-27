@@ -2,7 +2,6 @@
 
 	aside.theme-doc-sidebar-container {
 		border-right: 1px solid var(--ifm-toc-border-color);
-		/* width: calc(100% + var(--ifm-navbar-sidebar-width)); */
 		position: fixed;
 		width: var(--ifm-navbar-sidebar-width);
 		height: calc(100% - var(--ifm-navbar-height));
@@ -11,15 +10,17 @@
 	}
 
 	aside.theme-doc-sidebar-container nav.menu {
+		display: inherit;
 		padding: 0.5rem 0 0.5rem 0.5rem;
 		scrollbar-gutter: stable;
 	}
 
-	div[class*="navbar"] div[class*="colorModeToggle_"] {
+	nav.navbar div.navbar__items div[class*="colorModeToggle_"],
+	nav.navbar div.navbar__items .navbar__item {
 		display: revert;
 	}
 
-	div[class*="navbar"] div[class*="navbarSearchContainer_"] {
+	nav.navbar div.navbar__items div[class*="navbarSearchContainer_"] {
 		position: revert;
 	}
 

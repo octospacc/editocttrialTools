@@ -5,19 +5,20 @@
 // * added HTML injections
 // * added build of single-file app
 // TODO: local search
-// TODO: should we try to un-inline scripts (and styles, but idk if they could exist) if they're always the same, to save on resources?
+// TODO: the navbar should be adjusted for small screens to view all possible buttons, maybe with horizontal scrolling, or else they should be relocated somewhere
+// TODO: should we try to un-inline scripts (and styles?) from HTML pages if they're always the same, and load them from a file. to save on resources and allow caching?
 
 const fs = require('fs-extra');
 const path = require('path');
 const mime = require('mime-types');
 const recursiveReaddir = require('recursive-readdir');
+const cheerio = require('cheerio');
 
 const buildDirectory = path.join(__dirname, 'build');
 const absoluteUrlRegExp = /(href|src)="(?!http[s]|ftp?:\/\/)([^"|#]+)"/g;
 const websiteTextualFileExtensions = ['.css', '.js', '.html', '.xml'];
 
 const isDirectoryPath = dirPath => path.extname(dirPath) === '';
-const isNotWebsiteTextualFile = (filePath, stats) => !(stats.isDirectory() || websiteTextualFileExtensions.includes(path.extname(filePath)));
 
 const convertAbsolutePathsToRelative = (content, filePath) => content.replace(absoluteUrlRegExp, (_absoluteUrl, $1, $2) => {
 	const currentDirPath = path.dirname(filePath);
@@ -66,21 +67,26 @@ const patchHtml = (html, injects) => html
 ;
 
 const postProcess = async () => {
+	const htmlPagePlacehold = '<docusaurus-static class="postprocess-tmp"></docusaurus-static>';
 	const injects = await loadInjects();
-	const filePaths = await recursiveReaddir(buildDirectory);//[isNotWebsiteTextualFile]);
+	const filePaths = await recursiveReaddir(buildDirectory);
 	const singleFileStream = await fs.createWriteStream(path.join(buildDirectory, 'docusaurus-static-single-file.html'), { flags: 'a' });
-	const singleFileHtml = /*convertAbsolutePathsToRelative(*/patchHtml(await fs.readFile(getMainHtmlFile(filePaths), 'utf8'), injects);//, path.relative(buildDirectory, getMainHtmlFile(filePaths)));
-	await singleFileStream.write(singleFileHtml.split('<div class="docRoot_')[0]);
+	const singleFileDom = cheerio.load(patchHtml(await fs.readFile(getMainHtmlFile(filePaths), 'utf8'), injects));
+	singleFileDom('div.main-wrapper').replaceWith(htmlPagePlacehold);
+	await singleFileStream.write(singleFileDom('html').prop('outerHTML').split(htmlPagePlacehold)[0]);
 	await Promise.all(
 		filePaths.map(async filePath => {
 			const relativePath = path.relative(buildDirectory, filePath);
-			let content = await fs.readFile(filePath, 'utf8');
+			let content = await fs.readFile(filePath);
 			if (path.extname(filePath) === '.html') {
+				content = String(content);
 				content = patchHtml(content, injects);
-				if (content.split('<div class="docRoot_')[1]) {
-					await singleFileStream.write(`<div data-docusaurus-static-path="/${relativePath.replaceAll('"', '&quot;').slice(0, -'index.html'.length)}" class="docRoot_` + content.split('<div class="docRoot_')[1].split('</main></div>')[0] + '</main></div>');
-				}
 				await fs.writeFile(filePath, convertAbsolutePathsToRelative(content, relativePath));
+				if (filePath.split(path.sep).slice(-1)[0] === 'index.html') {
+					const contentDom = cheerio.load(content);
+					contentDom('div.main-wrapper').prop('data-docusaurus-static-path', `/${relativePath.slice(0, -'index.html'.length)}`);
+					await singleFileStream.write(contentDom('div.main-wrapper').prop('outerHTML'));
+				}
 			} else if (path.extname(filePath) === '.css') {
 				await singleFileStream.write(`<style>${content}</style>`);
 			} else if (path.extname(filePath) === '.js') {
@@ -89,11 +95,11 @@ const postProcess = async () => {
 					await singleFileStream.write(`<script>${content}</script>`);
 				}
 			} else {
-				await singleFileStream.write(`<script>window["docusaurus-static"].inlineDataFiles["${relativePath.replaceAll('"', '&quot;')}"]="data:${mime.lookup(filePath)};base64,${btoa(unescape(encodeURIComponent(content)))}";</script>`);
+				await singleFileStream.write(`<script>window["docusaurus-static"].inlineDataFiles["${relativePath.replaceAll('"', '&quot;')}"]="data:${mime.lookup(filePath)};base64,${content.toString('base64')}";</script>`);
 			}
 		})
 	);
-	await singleFileStream.write(injects['single-file'] + singleFileHtml.split('</main></div>')[1]);
+	await singleFileStream.write(injects['single-file'] + singleFileDom('html').prop('outerHTML').split(htmlPagePlacehold)[1]);
 	await singleFileStream.end();
 };
 

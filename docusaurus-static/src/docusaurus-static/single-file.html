@@ -1,17 +1,23 @@
 <style>
 
-	div[class*="docRoot_"] {
+	div.main-wrapper[data-docusaurus-static-path] {
 		display: none;
 	}
 
-	div[class*="docRoot_"][data-docusaurus-static-open="true"] {
+	div.main-wrapper[data-docusaurus-static-path][data-docusaurus-static-open="true"] {
 		display: inherit;
+	}
+
+	/* fix a strange bug with the home button of the breadcrumbs bar being too low, only happens here in SPA */
+	nav.theme-doc-breadcrumbs > ul.breadcrumbs > li.breadcrumbs__item > a.breadcrumbs__link[href="#/"] {
+		vertical-align: middle;
 	}
 
 </style><script>
 (function(){
 // TODO: should we should close the left menu on mobile when click on an item, for consistency?
 
+	var pageElemQuery = 'div.main-wrapper[data-docusaurus-static-path]';
 	var lastLocationHash;
 
 	function UpdateCurrentPage() {
@@ -25,11 +31,11 @@
 			locPage = hashTokens.slice(1, -1).join('#');
 			locTitle = hashTokens.slice(-1)[0];
 		}
-		var docOpenElem = document.querySelector('div[class*="docRoot_"][data-docusaurus-static-open="true"]');
+		var docOpenElem = document.querySelector(`${pageElemQuery}[data-docusaurus-static-open="true"]`);
 		if (docOpenElem) {
 			docOpenElem.dataset.docusaurusStaticOpen = false;
 		}
-		document.querySelector(`div[class*="docRoot_"][data-docusaurus-static-path="${locPage}"]`/*index.html*/).dataset.docusaurusStaticOpen = true;
+		document.querySelector(`${pageElemQuery}[data-docusaurus-static-path="${locPage}"]`).dataset.docusaurusStaticOpen = true;
 		if (locTitle) {
 			location.hash = `#${locPage}`;
 			location.hash = `#${locPage}#${locTitle}`;
@@ -45,8 +51,7 @@
 		}
 	});
 
-	// TODO recheck this actually works with duplicate names across different pages
-	Array.from(document.querySelectorAll('div[class*="docRoot_"]')).forEach(function(docElem){
+	Array.from(document.querySelectorAll(`${pageElemQuery}`)).forEach(function(docElem){
 		Array.from(docElem.querySelectorAll('.anchor[id]')).forEach(function(anchorElem){
 			var idNew = `${docElem.dataset.docusaurusStaticPath}#${anchorElem.id}`;
 			Array.from(document.querySelectorAll(`a[href$="#${anchorElem.id}"]`)).forEach(function(linkedElem){
@@ -54,16 +59,6 @@
 			});
 			anchorElem.id = idNew;
 		});
-	});
-
-	Array.from(document.querySelectorAll('a[href^="/"]')).forEach(function(linkedElem){
-		var href = linkedElem.getAttribute('href');
-		if (!href.startsWith('//')) {
-			if (!href.endsWith('/')) {
-				href += '/';
-			}
-			linkedElem.href = `#${href}`;
-		}
 	});
 
 	window.onhashchange = function(){
@@ -74,6 +69,20 @@
 	};
 
 	UpdateCurrentPage();
+
+	window.addEventListener('load', function(){
+
+		Array.from(document.querySelectorAll('a[href^="/"]')).forEach(function(linkedElem){
+			var href = linkedElem.getAttribute('href');
+			if (!href.startsWith('//')) {
+				if (!href.endsWith('/')) {
+					href += '/';
+				}
+				linkedElem.href = `#${href}`;
+			}
+		});
+
+	});
 
 })();
 </script>
