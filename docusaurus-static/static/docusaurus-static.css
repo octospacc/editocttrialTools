@@ -1,0 +1,30 @@
+@media (max-width: 996px) {
+
+	aside.theme-doc-sidebar-container {
+		border-right: 1px solid var(--ifm-toc-border-color);
+		/* width: calc(100% + var(--ifm-navbar-sidebar-width)); */
+		position: fixed;
+		width: var(--ifm-navbar-sidebar-width);
+		height: calc(100% - var(--ifm-navbar-height));
+		z-index: var(--ifm-z-index-dropdown);
+		background-color: var(--ifm-navbar-background-color);
+	}
+
+	aside.theme-doc-sidebar-container nav.menu {
+		padding: 0.5rem 0 0.5rem 0.5rem;
+		scrollbar-gutter: stable;
+	}
+
+	div[class*="navbar"] div[class*="colorModeToggle_"] {
+		display: revert;
+	}
+
+	div[class*="navbar"] div[class*="navbarSearchContainer_"] {
+		position: revert;
+	}
+
+}
+
+div[class*="colorModeToggle_"] > button.clean-btn {
+	cursor: pointer;
+}
