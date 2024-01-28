@@ -1,0 +1,29 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  page_build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Build
+      run: |
+        mkdir -p ./public
+        sudo apt update
+        sudo apt install -y npm
+        cd ./docusaurus-static
+        npm install
+        npm run build+postprocess
+        mv ./build ../public/docusaurus-static
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: public
+

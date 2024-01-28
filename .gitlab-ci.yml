@@ -11,7 +11,7 @@ pages:
     cd ./docusaurus-static
     npm install
     npm run build+postprocess
-    mv ./build ./public/docusaurus-static
+    mv ./build ../public/docusaurus-static
   artifacts:
     paths:
     - public
