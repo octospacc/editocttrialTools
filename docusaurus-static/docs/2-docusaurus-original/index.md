@@ -2,7 +2,9 @@
 sidebar_position: 1
 ---
 
-# Tutorial Intro
+# On the Original Docusaurus
+
+For demonstrative purposes, and since everything said in it still applies, the original demo content that serves as a tutorial for Docusaurus is being left available here.
 
 Let's discover **Docusaurus in less than 5 minutes**.
 

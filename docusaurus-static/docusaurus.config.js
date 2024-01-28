@@ -20,8 +20,8 @@ const config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  //organizationName: 'facebook', // Usually your GitHub org/user name.
+  //projectName: 'docusaurus', // Usually your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -78,12 +78,12 @@ const config = {
             type: 'docSidebar',
             sidebarId: 'tutorialSidebar',
             position: 'left',
-            label: 'Tutorial',
+            label: 'Guide',
           },
           { to: '/blog', label: 'Blog', position: 'left' },
           {
-            href: 'https://github.com/facebook/docusaurus',
-            label: 'GitHub',
+            href: 'https://gitlab.com/octospacc/editocttrialTools/-/tree/main/docusaurus-static',
+            label: 'Git',
             position: 'right',
           },
           //{ type: 'docsVersionDropdown', position: 'right' },
@@ -94,46 +94,29 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: 'About This',
             items: [
-              {
-                label: 'Tutorial',
-                to: '/docs/intro',
-              },
+              { label: 'Guide', to: '/docs' },
+              { label: 'Blog', to: '/blog' },
+              { label: 'GitLab', href: 'https://gitlab.com/octospacc/editocttrialTools/-/tree/main/docusaurus-static' },
+              { label: 'GitHub', href: 'https://github.com/octospacc/editocttrialTools/tree/main/docusaurus-static' },
             ],
           },
           {
-            title: 'Community',
+            title: 'Docusaurus in General',
             items: [
-              {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-              },
-              {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
-              },
-              {
-                label: 'Twitter',
-                href: 'https://twitter.com/docusaurus',
-              },
-            ],
-          },
-          {
-            title: 'More',
-            items: [
-              {
-                label: 'Blog',
-                to: '/blog',
-              },
-              {
-                label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
-              },
+              { label: 'GitHub', href: 'https://github.com/facebook/docusaurus' },
+              { label: 'Stack Overflow', href: 'https://stackoverflow.com/questions/tagged/docusaurus' },
+              { label: 'Discord', href: 'https://discordapp.com/invite/docusaurus' },
+              { label: 'Twitter', href: 'https://twitter.com/docusaurus' },
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} OctoSpacc. Built with Docusaurus-Static.`,
+        copyright: `
+          Copyright © ${new Date().getFullYear()}
+          <a href="https://hub.octt.eu.org">OctoSpacc</a>.
+          Built with Docusaurus-Static.
+        `,
       },
       prism: {
         theme: prismThemes.github,

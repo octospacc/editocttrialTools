@@ -4,32 +4,36 @@ import styles from './styles.module.css';
 
 const FeatureList = [
   {
-    title: 'Easy to Use',
+    title: 'Just as Easy to Use',
     Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        Docusaurus-Static is just a set of independent postprocessing and runtime scripts,
+        that can complement an existing standard Docusaurus site.
+        Just 1 instantaneous build step and a couple of static files
+        will make you achieve maximum web compatibility.
       </>
     ),
   },
   {
-    title: 'Focus on What Matters',
+    title: 'Focus on What Matters, for Real',
     Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        You focus on your content, Docusaurus takes care of all the rendering chores,
+        and Docusaurus-Static makes the website work good in all serverless situations.
+        Go ahead and move your docs into the <code>docs</code> directory, or start writing in <code>blog</code>.
       </>
     ),
   },
   {
-    title: 'Powered by React',
+    title: 'Powered, not enslaved, by React',
     Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Docusaurus-Static keeps the full functionality of Docusaurus available for server deployments,
+        letting you extend or customize your website layout by reusing React,
+        while allowing basic functionality to still work without any heavy framework.
       </>
     ),
   },
