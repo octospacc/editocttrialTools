@@ -21,7 +21,7 @@
 	var lastLocationHash;
 
 	function UpdateCurrentPage() {
-		var hashTokens = location.hash.split('#');
+		var hashTokens = decodeURIComponent(location.hash).split('#');
 		var locPage, locTitle;
 		if (hashTokens.length < 2) {
 			locPage = '/';
@@ -44,6 +44,7 @@
 		}
 	}
 
+	/* load element sources from data URIs */
 	Array.from(document.querySelectorAll('[src^="/"]')).forEach(function(elem){
 		var dataSrc = window['docusaurus-static'].inlineDataFiles[elem.getAttribute('src').slice(1)];
 		if (dataSrc) {
@@ -51,13 +52,14 @@
 		}
 	});
 
+	/* reconstruct page hashes, heading ids, ToC links */
 	Array.from(document.querySelectorAll(`${pageElemQuery}`)).forEach(function(docElem){
 		Array.from(docElem.querySelectorAll('.anchor[id]')).forEach(function(anchorElem){
 			var idNew = `${docElem.dataset.docusaurusStaticPath}#${anchorElem.id}`;
 			Array.from(document.querySelectorAll(`a[href$="#${anchorElem.id}"]`)).forEach(function(linkedElem){
 				linkedElem.href = `#${idNew}`;
 			});
-			anchorElem.id = idNew;
+			//anchorElem.id = idNew;
 		});
 	});
 
@@ -72,6 +74,7 @@
 
 	window.addEventListener('load', function(){
 
+		/* reconstruct internal links to do in-document navigation */
 		Array.from(document.querySelectorAll('a[href^="/"]')).forEach(function(linkedElem){
 			var href = linkedElem.getAttribute('href');
 			if (!href.startsWith('//')) {
@@ -81,6 +84,9 @@
 				linkedElem.href = `#${href}`;
 			}
 		});
+
+		/* couldn't manage to get skip to content working, better removing it for now */
+		document.querySelector('a[href="#__docusaurus_skipToContent_fallback"]').remove();
 
 	});
 

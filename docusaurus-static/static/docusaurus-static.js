@@ -7,17 +7,19 @@
 		elem.style.display = (!elem.style.display ? 'revert' : '');
 	}
 
-	// remove duplicate menu buttons
+	/* remove duplicate menu buttons */
 	Array.from(document.querySelectorAll('div.navbar__items > button.navbar__toggle')).slice(1).forEach(function(elem){
 		elem.remove();
 	});
 
-	document.querySelector('div.navbar__items > button.navbar__toggle').onclick= function(){
+	/* initialize navigation menu */
+	document.querySelector('div.navbar__items > button.navbar__toggle').onclick = function(){
 		Array.from(document.querySelectorAll('div[class*="docRoot_"] > aside.theme-doc-sidebar-container, div.main-wrapper nav[class*="sidebar_"]')).forEach(function(elem){
 			ToggleElemDisplay(elem);
 		});
 	};
 
+	/* theme switching */
 	var themeButtonElem = document.querySelector('div[class*="colorModeToggle_"] > button');
 	themeButtonElem.disabled = false;
 	themeButtonElem.onclick= function(){
@@ -37,12 +39,14 @@
 		}
 	};
 
+	/* set document to default theme */
 	if (!['light', 'dark'].includes(documentData.theme)) {
 		documentData.theme = 'light';
 	}
 
 	window.addEventListener('load', function(){
 
+		/* initialize ToC menus */
 		var desktopTocQuery = 'div.theme-doc-toc-desktop';
 		var mobileTocQuery = 'div.theme-doc-toc-mobile';
 		Array.from(document.querySelectorAll('div[class*="docRoot_"]')).forEach(function(docElem){
