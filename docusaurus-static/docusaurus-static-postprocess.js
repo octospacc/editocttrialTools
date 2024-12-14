@@ -1,4 +1,5 @@
 'use strict';
+// NOTE: Licensing of this file is promiscuous, since the original this is based on has no license, but this has probably been transformed enough from the original that it could be licensed under the project's license (MIT). You are therefore advised to make your own judgement about the legal state of it. Note that this file is only needed for compilation, and isn't distributed in the site build output, so you could avoid worrying about redistribution rights/restrictions in some circumstances.
 
 // this script is based on <https://github.com/facebook/docusaurus/issues/448#issuecomment-908777029>, with the following changes:
 // * fixed directory mis-detection for "index.html" path adjustments
@@ -73,7 +74,7 @@ const postProcess = async () => {
 	const singleFileStream = await fs.createWriteStream(path.join(buildDirectory, 'docusaurus-static-single-file.html'), { flags: 'a' });
 	const singleFileDom = cheerio.load(patchHtml(await fs.readFile(getMainHtmlFile(filePaths), 'utf8'), injects));
 	singleFileDom('div.main-wrapper').replaceWith(htmlPagePlacehold);
-	await singleFileStream.write(singleFileDom('html').prop('outerHTML').split(htmlPagePlacehold)[0]);
+	await singleFileStream.write('<!DOCTYPE html>' + singleFileDom('html').prop('outerHTML').split(htmlPagePlacehold)[0]);
 	await Promise.all(
 		filePaths.map(async filePath => {
 			const relativePath = path.relative(buildDirectory, filePath);

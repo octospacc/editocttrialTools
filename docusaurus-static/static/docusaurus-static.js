@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 (function(){
 
 	var pageElemQuery = 'div.main-wrapper[data-docusaurus-static-path]';
