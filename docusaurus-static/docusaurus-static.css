@@ -1,3 +1,5 @@
+/* SPDX-License-Identifier: MIT */
+
 @media (max-width: 996px) {
 
 	aside.theme-doc-sidebar-container {
@@ -7,6 +9,7 @@
 		height: calc(100% - var(--ifm-navbar-height));
 		z-index: var(--ifm-z-index-dropdown);
 		background-color: var(--ifm-navbar-background-color);
+		overflow-y: auto;
 	}
 
 	aside.theme-doc-sidebar-container nav.menu {
