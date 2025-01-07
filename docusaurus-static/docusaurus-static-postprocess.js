@@ -22,6 +22,9 @@ const websiteTextualFileExtensions = ['.css', '.js', '.html', '.xml'];
 const isDirectoryPath = dirPath => path.extname(dirPath) === '';
 
 const convertAbsolutePathsToRelative = (content, filePath) => content.replace(absoluteUrlRegExp, (_absoluteUrl, $1, $2) => {
+	if ($2.toLowerCase().startsWith('data:')) {
+		return _absoluteUrl;
+	}
 	const currentDirPath = path.dirname(filePath);
 	const relativeDirPath = currentDirPath === '.' ? '.' : path.relative(currentDirPath, '');
 	let relativePath = path.join(relativeDirPath, $2);
